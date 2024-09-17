@@ -7,3 +7,10 @@
     @apply text-ds-fg;
   } 
 }
+
+html, body, #root {
+  min-height: 100vh;
+  display: flex;
+  min-width: 100vw;
+  flex: 1;
+}
