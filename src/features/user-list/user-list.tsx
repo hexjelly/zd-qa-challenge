@@ -22,12 +22,13 @@ export function UserList() {
 				accessorKey: "user",
 				header: "User",
 				cell: ({ row }) => (
-					<div>
-						<span>{row.original.name}</span>
-						<span>{row.original.email}</span>
-					</div>
+					<Avatar
+						email={row.original.email}
+						name={row.original.name}
+						image={row.original.avatar}
+					/>
 				),
-				size: 350,
+				size: 370,
 			},
 			{
 				accessorKey: "role",
