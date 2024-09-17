@@ -1,4 +1,4 @@
-export function formatPermission(input: string): string {
+export function formatRole(input: string): string {
 	return input
 		.toLowerCase()
 		.split("_")
