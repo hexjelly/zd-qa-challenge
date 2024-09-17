@@ -9,13 +9,7 @@ import {
 	type RowSelectionState,
 	useReactTable,
 } from "@tanstack/react-table";
-import {
-	type MouseEventHandler,
-	useCallback,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useMemo, useRef, useState } from "react";
 import type { Role, User } from "./entities/user";
 import { Avatar } from "../../components/avatar";
 import { Checkbox } from "../../components/checkbox";
@@ -95,6 +89,7 @@ export function UserList() {
 	const { rows } = table.getRowModel();
 
 	const rowVirtualizer = useVirtualizer({
+		gap: 4,
 		count: rows.length,
 		estimateSize: () => 64, //estimate row height for accurate scrollbar dragging
 		getScrollElement: () => parentRef.current,
@@ -186,12 +181,12 @@ export function UserList() {
 							))}
 						</thead>
 						<tbody
-							className="grid relative space-y-1"
+							className="grid relative"
 							style={{
 								height: `${rowVirtualizer.getTotalSize()}px`,
 							}}
 						>
-							{rowVirtualizer.getVirtualItems().map((virtualRow) => {
+							{rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
 								const row = rows[virtualRow.index] as Row<User>;
 								const isChecked = rowSelection[row.id] === true;
 								return (
@@ -207,7 +202,7 @@ export function UserList() {
 											"hover:bg-ds-bg-subtle",
 										])}
 										style={{
-											transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
+											transform: `translateY(${virtualRow.start}px)`,
 										}}
 										onClick={row.getToggleSelectedHandler()}
 									>
