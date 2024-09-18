@@ -4,6 +4,12 @@ React, with Tanstack Query, Tanstack Table and Tanstack Virtual for the heavy li
 
 MSW for mock API (enabled in production for now as well to emulate real API in deployment).
 
+Functionality implement:
+- Search filtering by name/email
+- Column sorting
+- Multi-select user deletion
+- Single user deletion
+
 ## Run
 `npm install`
 `npm run dev`
