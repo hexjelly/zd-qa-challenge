@@ -2,8 +2,10 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { useGetUsers } from "./api/use-get-users";
 import {
 	type ColumnDef,
+	type ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
+	getFilteredRowModel,
 	getSortedRowModel,
 	type Row,
 	type RowSelectionState,
@@ -20,6 +22,8 @@ import { RowActions } from "./components/row-actions";
 import { SelectionHeader } from "./components/selection-header";
 import { useDeleteUsers } from "./api/use-delete-users";
 import ArrowDownIcon from "../../icons/arrow-down.svg?react";
+import { DebouncedInput } from "../../components/debounced-input";
+import { userFilterFn } from "./helpers/user-filter";
 
 export function UserList() {
 	const { data } = useGetUsers();
@@ -48,6 +52,7 @@ export function UserList() {
 			{
 				accessorKey: "user",
 				header: "User",
+				id: "user",
 				cell: ({ row }) => (
 					<Avatar
 						email={row.original.email}
@@ -59,6 +64,7 @@ export function UserList() {
 				sortingFn: (userA, userB, _columnId) => {
 					return userA.original.name.localeCompare(userB.original.name);
 				},
+				filterFn: userFilterFn,
 				size: 370,
 			},
 			{
@@ -78,6 +84,9 @@ export function UserList() {
 		[],
 	);
 
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+		{ id: "user", value: "" },
+	]);
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
 	const table = useReactTable({
@@ -85,16 +94,19 @@ export function UserList() {
 		enableRowSelection: true,
 		enableMultiRowSelection: true,
 		getRowId: (row) => row.id.toString(),
-		state: { rowSelection },
+		state: { rowSelection, columnFilters },
+		onColumnFiltersChange: setColumnFilters,
 		onRowSelectionChange: setRowSelection,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 	});
 
 	const parentRef = useRef<HTMLDivElement>(null);
 
 	const { rows } = table.getRowModel();
+	const userColumn = table.getColumn("user");
 
 	const rowVirtualizer = useVirtualizer({
 		gap: 4,
@@ -115,7 +127,12 @@ export function UserList() {
 			<div className="flex justify-between gap-3 items-center">
 				<h2 className="font-medium text-lg">Account users</h2>
 				<div className="flex gap-3">
-					<input placeholder="Search" />
+					<DebouncedInput
+						onChange={(value) => userColumn?.setFilterValue(value)}
+						placeholder="Search"
+						type="text"
+						value={(userColumn?.getFilterValue() ?? "") as string}
+					/>
 					<Button type="button">Connect users</Button>
 				</div>
 			</div>
