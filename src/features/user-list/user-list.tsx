@@ -22,7 +22,7 @@ import { useDeleteUsers } from "./api/use-delete-users";
 import ArrowDownIcon from "../../icons/arrow-down.svg?react";
 
 export function UserList() {
-	const { data, isPending } = useGetUsers();
+	const { data } = useGetUsers();
 	const { mutate, isPending: deleteUsersIsPending } = useDeleteUsers();
 
 	const columns = useMemo<ColumnDef<User>[]>(

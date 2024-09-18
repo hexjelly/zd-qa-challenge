@@ -1,5 +1,6 @@
 import { API_URL } from "../config/app";
 
+// @ts-expect-error
 const DISABLE_MOCKING = process.env.NODE_ENV !== "development";
 
 export async function enableMocking() {
