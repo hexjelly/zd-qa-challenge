@@ -22,6 +22,7 @@ import { RowActions } from "./components/row-actions";
 import { SelectionHeader } from "./components/selection-header";
 import { useDeleteUsers } from "./api/use-delete-users";
 import ArrowDownIcon from "../../icons/arrow-down.svg?react";
+import SearchIcon from "../../icons/search.svg?react";
 import { DebouncedInput } from "../../components/debounced-input";
 import { userFilterFn } from "./helpers/user-filter";
 
@@ -132,6 +133,7 @@ export function UserList() {
 						placeholder="Search"
 						type="text"
 						value={(userColumn?.getFilterValue() ?? "") as string}
+						icon={<SearchIcon className="text-ds-subtle" />}
 					/>
 					<Button type="button">Connect users</Button>
 				</div>
