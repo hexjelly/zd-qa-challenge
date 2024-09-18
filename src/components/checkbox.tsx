@@ -20,7 +20,7 @@ export function Checkbox({ indeterminate, checked, ...rest }: CheckboxProps) {
 		// biome-ignore lint: too annoying atm
 		<label
 			className={twMerge([
-				"w-4 h-4 bg-white rounded text-white flex items-center justify-center border border-ds-border",
+				"w-4 h-4 cursor-pointer bg-white rounded text-white flex items-center justify-center border border-ds-border",
 				checked && "bg-ds-primary",
 				indeterminate && "bg-ds-primary",
 			])}
