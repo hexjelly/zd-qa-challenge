@@ -133,7 +133,7 @@ export function UserList() {
 					className="overflow-auto relative h-[645px] w-[684px]"
 				>
 					<table className="grid">
-						<thead className="grid sticky top-0 z-10">
+						<thead className="grid sticky top-0 z-10 bg-white">
 							{table.getHeaderGroups().map((headerGroup) => (
 								<tr key={headerGroup.id} className="flex w-full gap-2">
 									{headerGroup.headers.map((header) => {
