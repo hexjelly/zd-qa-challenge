@@ -30,7 +30,7 @@ export function RowActions({ row }: RowActionsProps) {
 	);
 
 	return (
-		<div className="flex items-center gap-1">
+		<div className="hidden items-center group-hover:flex gap-1">
 			<Button
 				variant="secondary"
 				shadow="sm"

@@ -205,7 +205,7 @@ export function UserList() {
 										className={twJoin([
 											isChecked &&
 												"bg-ds-bg-subtle before:absolute before:content-[''] before:rounded-l before:top-0 before:bg-ds-primary before:w-[4px] before:h-[64px]",
-											"flex absolute w-full group rounded gap-2 cursor-pointer",
+											"flex group absolute w-full group rounded gap-2 cursor-pointer",
 											"hover:bg-ds-bg-subtle",
 										])}
 										style={{
