@@ -38,7 +38,7 @@ export function SelectionHeader({
 	}, [deleteMutationFn, selection, resetTableSelectionFn]);
 
 	return (
-		<div className="flex gap-6 items-center h-8">
+		<div className="flex gap-6 items-center h-8 pl-3.5">
 			<h3 className="text-ds-fg-2 font-medium">
 				{`${selectedCount} user${selectedCount !== 1 ? "s" : ""} selected`}
 			</h3>

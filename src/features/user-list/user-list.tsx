@@ -36,19 +36,23 @@ export function UserList() {
 				id: "select",
 				enableSorting: false,
 				header: ({ table }) => (
-					<Checkbox
-						checked={table.getIsAllRowsSelected()}
-						indeterminate={table.getIsSomeRowsSelected()}
-						onChange={table.getToggleAllRowsSelectedHandler()}
-					/>
+					<div className="pl-3 flex items-center">
+						<Checkbox
+							checked={table.getIsAllRowsSelected()}
+							indeterminate={table.getIsSomeRowsSelected()}
+							onChange={table.getToggleAllRowsSelectedHandler()}
+						/>
+					</div>
 				),
 				cell: ({ row }) => (
-					<Checkbox
-						checked={row.getIsSelected()}
-						onChange={row.getToggleSelectedHandler()}
-					/>
+					<div className="pl-3 flex items-center">
+						<Checkbox
+							checked={row.getIsSelected()}
+							onChange={row.getToggleSelectedHandler()}
+						/>
+					</div>
 				),
-				size: 20,
+				size: 32,
 			},
 			{
 				accessorKey: "user",
@@ -139,7 +143,7 @@ export function UserList() {
 				</div>
 			</div>
 
-			<div className="bg-white rounded-lg p-4 flex flex-col gap-6">
+			<div className="bg-white rounded-lg px-4 py-6 flex flex-col gap-6">
 				<SelectionHeader
 					selection={rowSelection}
 					deleteMutationFn={mutate}
