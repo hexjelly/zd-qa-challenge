@@ -15,18 +15,21 @@ import { Avatar } from "../../components/avatar";
 import { Checkbox } from "../../components/checkbox";
 import { Button } from "../../components/button";
 import { RoleBadge } from "./components/role-badge";
-import EditIcon from "../../icons/edit.svg?react";
-import TrashIcon from "../../icons/trash.svg?react";
 import { twJoin } from "tailwind-merge";
 import { RowActions } from "./components/row-actions";
+import { SelectionHeader } from "./components/selection-header";
+import { useDeleteUsers } from "./api/use-delete-users";
+import ArrowDownIcon from "../../icons/arrow-down.svg?react";
 
 export function UserList() {
-	const { data } = useGetUsers();
+	const { data, isPending } = useGetUsers();
+	const { mutate, isPending: deleteUsersIsPending } = useDeleteUsers();
 
 	const columns = useMemo<ColumnDef<User>[]>(
 		() => [
 			{
 				id: "select",
+				enableSorting: false,
 				header: ({ table }) => (
 					<Checkbox
 						checked={table.getIsAllRowsSelected()}
@@ -52,6 +55,10 @@ export function UserList() {
 						image={row.original.avatar}
 					/>
 				),
+				sortDescFirst: false,
+				sortingFn: (userA, userB, _columnId) => {
+					return userA.original.name.localeCompare(userB.original.name);
+				},
 				size: 370,
 			},
 			{
@@ -63,6 +70,7 @@ export function UserList() {
 			{
 				accessorKey: "controls",
 				size: 115,
+				enableSorting: false,
 				header: "",
 				cell: ({ row }) => <RowActions row={row} />,
 			},
@@ -93,7 +101,7 @@ export function UserList() {
 		count: rows.length,
 		estimateSize: () => 64, //estimate row height for accurate scrollbar dragging
 		getScrollElement: () => parentRef.current,
-		//measure dynamic row height, except in firefox because it measures table border height incorrectly
+		// measure dynamic row height, except in firefox because it measures table border height incorrectly
 		measureElement:
 			typeof window !== "undefined" &&
 			navigator.userAgent.indexOf("Firefox") === -1
@@ -112,37 +120,16 @@ export function UserList() {
 				</div>
 			</div>
 
-			<div className="bg-white rounded-lg p-4">
-				<div className="flex gap-6 items-center">
-					<h3 className="text-ds-fg-2 font-medium">
-						{Object.keys(rowSelection).length} users selected
-					</h3>
-
-					<div className="flex items-center gap-2">
-						<Button
-							variant="secondary"
-							shadow="sm"
-							size="sm"
-							type="button"
-							icon={EditIcon}
-						>
-							Edit
-						</Button>
-						<Button
-							variant="secondary"
-							shadow="sm"
-							size="sm"
-							type="button"
-							icon={TrashIcon}
-						>
-							Delete
-						</Button>
-					</div>
-				</div>
+			<div className="bg-white rounded-lg p-4 flex flex-col gap-6">
+				<SelectionHeader
+					selection={rowSelection}
+					deleteMutationFn={mutate}
+					isPending={deleteUsersIsPending}
+				/>
 
 				<div
 					ref={parentRef}
-					className="overflow-auto relative h-[615px] w-[684px]"
+					className="overflow-auto relative h-[645px] w-[684px]"
 				>
 					<table className="grid">
 						<thead className="grid sticky top-0 z-10">
@@ -152,15 +139,15 @@ export function UserList() {
 										return (
 											<th
 												key={header.id}
+												className="text-ds-subtle flex text-xs font-medium"
 												style={{
-													display: "flex",
 													width: header.getSize(),
 												}}
 											>
 												<div
 													{...{
 														className: header.column.getCanSort()
-															? "cursor-pointer select-none"
+															? "cursor-pointer select-none flex gap-1 items-center"
 															: "",
 														onClick: header.column.getToggleSortingHandler(),
 													}}
@@ -170,8 +157,8 @@ export function UserList() {
 														header.getContext(),
 													)}
 													{{
-														asc: " 🔼",
-														desc: " 🔽",
+														asc: <ArrowDownIcon />,
+														desc: <ArrowDownIcon className="rotate-180" />,
 													}[header.column.getIsSorted() as string] ?? null}
 												</div>
 											</th>
@@ -186,14 +173,14 @@ export function UserList() {
 								height: `${rowVirtualizer.getTotalSize()}px`,
 							}}
 						>
-							{rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
+							{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 								const row = rows[virtualRow.index] as Row<User>;
 								const isChecked = rowSelection[row.id] === true;
 								return (
 									// biome-ignore lint: onKey handler for tr requires too much effort right now
 									<tr
-										data-index={virtualRow.index} //needed for dynamic row height measurement
-										ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
+										data-index={virtualRow.index} // needed for dynamic row height measurement
+										ref={(node) => rowVirtualizer.measureElement(node)} // measure dynamic row height
 										key={row.id}
 										className={twJoin([
 											isChecked &&
