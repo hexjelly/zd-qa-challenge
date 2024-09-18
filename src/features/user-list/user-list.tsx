@@ -1,7 +1,6 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useGetUsers } from "./api/use-get-users";
 import {
-	type ColumnDef,
 	type ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
@@ -11,83 +10,22 @@ import {
 	type RowSelectionState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useRef, useState } from "react";
-import type { Role, User } from "./entities/user";
-import { Avatar } from "../../components/avatar";
-import { Checkbox } from "../../components/checkbox";
+import { useRef, useState } from "react";
+import type { User } from "./entities/user";
 import { Button } from "../../components/button";
-import { RoleBadge } from "./components/role-badge";
 import { twJoin } from "tailwind-merge";
-import { RowActions } from "./components/row-actions";
 import { SelectionHeader } from "./components/selection-header";
 import { useDeleteUsers } from "./api/use-delete-users";
 import ArrowDownIcon from "../../icons/arrow-down.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
 import { DebouncedInput } from "../../components/debounced-input";
-import { userFilterFn } from "./helpers/user-filter";
+import { useColumns } from "./helpers/use-columns";
 
 export function UserList() {
 	const { data } = useGetUsers();
 	const { mutate, isPending: deleteUsersIsPending } = useDeleteUsers();
 
-	const columns = useMemo<ColumnDef<User>[]>(
-		() => [
-			{
-				id: "select",
-				enableSorting: false,
-				header: ({ table }) => (
-					<div className="pl-3 flex items-center">
-						<Checkbox
-							checked={table.getIsAllRowsSelected()}
-							indeterminate={table.getIsSomeRowsSelected()}
-							onChange={table.getToggleAllRowsSelectedHandler()}
-						/>
-					</div>
-				),
-				cell: ({ row }) => (
-					<div className="pl-3 flex items-center">
-						<Checkbox
-							checked={row.getIsSelected()}
-							onChange={row.getToggleSelectedHandler()}
-						/>
-					</div>
-				),
-				size: 32,
-			},
-			{
-				accessorKey: "user",
-				header: "User",
-				id: "user",
-				cell: ({ row }) => (
-					<Avatar
-						email={row.original.email}
-						name={row.original.name}
-						image={row.original.avatar}
-					/>
-				),
-				sortDescFirst: false,
-				sortingFn: (userA, userB, _columnId) => {
-					return userA.original.name.localeCompare(userB.original.name);
-				},
-				filterFn: userFilterFn,
-				size: 370,
-			},
-			{
-				accessorKey: "role",
-				header: "Permission",
-				cell: (cell) => <RoleBadge role={cell.getValue() as Role} />,
-				size: 140,
-			},
-			{
-				accessorKey: "controls",
-				size: 115,
-				enableSorting: false,
-				header: "",
-				cell: ({ row }) => <RowActions row={row} />,
-			},
-		],
-		[],
-	);
+	const columns = useColumns();
 
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
 		{ id: "user", value: "" },
