@@ -17,6 +17,7 @@ export function RowActions({ row }: RowActionsProps) {
 		(event) => {
 			event.stopPropagation();
 			mutate({ userId: row.id });
+			row.toggleSelected(false);
 		},
 		[row, mutate],
 	);
