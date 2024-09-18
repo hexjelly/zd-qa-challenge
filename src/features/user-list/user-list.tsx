@@ -125,6 +125,7 @@ export function UserList() {
 					selection={rowSelection}
 					deleteMutationFn={mutate}
 					isPending={deleteUsersIsPending}
+					resetTableSelectionFn={table.toggleAllRowsSelected}
 				/>
 
 				<div

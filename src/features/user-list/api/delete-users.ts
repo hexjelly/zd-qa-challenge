@@ -1,7 +1,7 @@
 import { API_URL } from "../../../config/app";
 import type { User } from "../entities/user";
 
-export type DeleteUsersResponse = User[];
+export type DeleteUsersResponse = { users: User[] };
 
 export async function deleteUsers(userIds: string[]) {
 	const res = await fetch(`${API_URL}/users`, {

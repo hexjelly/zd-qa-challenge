@@ -17,12 +17,14 @@ export type SelectionHeaderProps = {
 		unknown
 	>;
 	isPending: boolean;
+	resetTableSelectionFn: (toggle: boolean) => void;
 };
 
 export function SelectionHeader({
 	selection,
 	deleteMutationFn,
 	isPending,
+	resetTableSelectionFn,
 }: SelectionHeaderProps) {
 	const selectedCount = useMemo(
 		() => Object.keys(selection).length,
@@ -32,7 +34,8 @@ export function SelectionHeader({
 	const deleteUsers = useCallback(() => {
 		const userIdsToDelete = Object.keys(selection);
 		deleteMutationFn({ userIds: userIdsToDelete });
-	}, [deleteMutationFn, selection]);
+		resetTableSelectionFn(false);
+	}, [deleteMutationFn, selection, resetTableSelectionFn]);
 
 	return (
 		<div className="flex gap-6 items-center h-8">
