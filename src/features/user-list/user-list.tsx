@@ -16,10 +16,10 @@ import { Button } from "../../components/button";
 import { twJoin } from "tailwind-merge";
 import { SelectionHeader } from "./components/selection-header";
 import { useDeleteUsers } from "./api/use-delete-users";
-import ArrowDownIcon from "../../icons/arrow-down.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
 import { DebouncedInput } from "../../components/debounced-input";
 import { useColumns } from "./helpers/use-columns";
+import { TableHeader } from "./components/table-header";
 
 export function UserList() {
 	const { data } = useGetUsers();
@@ -97,35 +97,9 @@ export function UserList() {
 						<thead className="grid sticky top-0 z-10 bg-white">
 							{table.getHeaderGroups().map((headerGroup) => (
 								<tr key={headerGroup.id} className="flex w-full gap-2">
-									{headerGroup.headers.map((header) => {
-										return (
-											<th
-												key={header.id}
-												className="text-ds-subtle flex text-xs font-medium"
-												style={{
-													width: header.getSize(),
-												}}
-											>
-												<div
-													{...{
-														className: header.column.getCanSort()
-															? "cursor-pointer select-none flex gap-1 items-center"
-															: "",
-														onClick: header.column.getToggleSortingHandler(),
-													}}
-												>
-													{flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
-													{{
-														asc: <ArrowDownIcon />,
-														desc: <ArrowDownIcon className="rotate-180" />,
-													}[header.column.getIsSorted() as string] ?? null}
-												</div>
-											</th>
-										);
-									})}
+									{headerGroup.headers.map((header) => (
+										<TableHeader key={header.id} header={header} />
+									))}
 								</tr>
 							))}
 						</thead>
