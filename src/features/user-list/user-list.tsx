@@ -2,7 +2,6 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { useGetUsers } from "./api/use-get-users";
 import {
 	type ColumnFiltersState,
-	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getSortedRowModel,
@@ -13,13 +12,13 @@ import {
 import { useRef, useState } from "react";
 import type { User } from "./entities/user";
 import { Button } from "../../components/button";
-import { twJoin } from "tailwind-merge";
 import { SelectionHeader } from "./components/selection-header";
 import { useDeleteUsers } from "./api/use-delete-users";
 import SearchIcon from "../../icons/search.svg?react";
 import { DebouncedInput } from "../../components/debounced-input";
 import { useColumns } from "./helpers/use-columns";
 import { TableHeader } from "./components/table-header";
+import { TableRow } from "./components/table-row";
 
 export function UserList() {
 	const { data } = useGetUsers();
@@ -113,39 +112,16 @@ export function UserList() {
 								const row = rows[virtualRow.index] as Row<User>;
 								const isChecked = rowSelection[row.id] === true;
 								return (
-									// biome-ignore lint: onKey handler for tr requires too much effort right now
-									<tr
+									<TableRow
+										row={row}
+										checked={isChecked}
 										data-index={virtualRow.index} // needed for dynamic row height measurement
 										ref={(node) => rowVirtualizer.measureElement(node)} // measure dynamic row height
 										key={row.id}
-										className={twJoin([
-											isChecked &&
-												"bg-ds-bg-subtle before:absolute before:content-[''] before:rounded-l before:top-0 before:bg-ds-primary before:w-[4px] before:h-[64px]",
-											"flex group absolute w-full group rounded gap-2 cursor-pointer",
-											"hover:bg-ds-bg-subtle",
-										])}
 										style={{
 											transform: `translateY(${virtualRow.start}px)`,
 										}}
-										onClick={row.getToggleSelectedHandler()}
-									>
-										{row.getVisibleCells().map((cell) => {
-											return (
-												<td
-													key={cell.id}
-													className="flex h-[64px] group:data"
-													style={{
-														width: cell.column.getSize(),
-													}}
-												>
-													{flexRender(
-														cell.column.columnDef.cell,
-														cell.getContext(),
-													)}
-												</td>
-											);
-										})}
-									</tr>
+									/>
 								);
 							})}
 						</tbody>
