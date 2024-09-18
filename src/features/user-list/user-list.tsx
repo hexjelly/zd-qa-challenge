@@ -149,7 +149,7 @@ export function UserList() {
 
 				<div
 					ref={parentRef}
-					className="overflow-auto relative h-[645px] w-[684px]"
+					className="overflow-auto relative h-[630px] w-[684px]"
 				>
 					<table className="grid">
 						<thead className="grid sticky top-0 z-10 bg-white">
