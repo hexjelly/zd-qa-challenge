@@ -1,9 +1,12 @@
 import { API_URL } from "../config/app";
 
+const DISABLE_MOCKING = process.env.NODE_ENV !== "development";
+
 export async function enableMocking() {
-	if (process.env.NODE_ENV !== "development") {
-		return;
-	}
+	// Mock even for deployment
+	// if (DISABLE_MOCKING) {
+	// 	return;
+	// }
 
 	const { worker } = await import("./browser");
 
