@@ -17,7 +17,7 @@ export type SelectionHeaderProps = {
 		unknown
 	>;
 	isPending: boolean;
-	resetTableSelectionFn: (toggle: boolean) => void;
+	resetTableSelectionFn: () => void;
 };
 
 export function SelectionHeader({
@@ -34,7 +34,7 @@ export function SelectionHeader({
 	const deleteUsers = useCallback(() => {
 		const userIdsToDelete = Object.keys(selection);
 		deleteMutationFn({ userIds: userIdsToDelete });
-		resetTableSelectionFn(false);
+		resetTableSelectionFn();
 	}, [deleteMutationFn, selection, resetTableSelectionFn]);
 
 	return (
