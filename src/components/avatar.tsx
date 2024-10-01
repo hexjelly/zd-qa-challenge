@@ -8,7 +8,7 @@ export function Avatar({ email, image, name }: AvatarProps) {
 	return (
 		<div className="flex items-center gap-3">
 			<img
-				className="w-8 h-8 rounded-full"
+				className="w-8 h-8 rounded-full object-cover"
 				src={image}
 				alt={name}
 				onError={(e) => {
